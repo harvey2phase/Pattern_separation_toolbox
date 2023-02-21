@@ -163,7 +163,12 @@ function[Imax, hmax] = KL_MI(n_chunk, max_time, input, output)
     for trial_ind = 1:n_trial_in
         for ii_chunk_ind = 1:n_chunk
             for jj_chunk_ind = ii_chunk_ind:n_chunk
-                p_dists_in(trial_ind, ii_chunk_ind, jj_chunk_ind) = spike_wasserstein(chunked_trains_in{trial_ind, ii_chunk_ind}, chunked_trains_in{trial_ind, jj_chunk_ind});
+                p_dists_in(
+                    trial_ind, ii_chunk_ind, jj_chunk_ind,
+                ) = spike_wasserstein(
+                    chunked_trains_in{trial_ind, ii_chunk_ind},
+                    chunked_trains_in{trial_ind, jj_chunk_ind},
+                );
             end
         end
     end
@@ -171,7 +176,12 @@ function[Imax, hmax] = KL_MI(n_chunk, max_time, input, output)
         for rep_ind = 1:n_rep
             for ii_chunk_ind = 1:n_chunk
                 for jj_chunk_ind = ii_chunk_ind:n_chunk
-                    p_dists_out(trial_ind, rep_ind, ii_chunk_ind, jj_chunk_ind) = spike_wasserstein(chunked_trains_out{trial_ind, rep_ind, ii_chunk_ind}, chunked_trains_out{trial_ind, rep_ind, jj_chunk_ind});
+                    p_dists_out(
+                        trial_ind, rep_ind, ii_chunk_ind, jj_chunk_ind,
+                    ) = spike_wasserstein(
+                        chunked_trains_out{trial_ind, rep_ind, ii_chunk_ind},
+                        chunked_trains_out{trial_ind, rep_ind, jj_chunk_ind},
+                    );
                 end
             end
         end
