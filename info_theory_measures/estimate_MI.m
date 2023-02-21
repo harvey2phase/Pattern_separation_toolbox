@@ -120,7 +120,7 @@ end
 
 function [val] = step_function_interp(t, svec, q)
     t_ind = find(t >= q, 1);
-    if length(t_ind) =  = 1
+    if length(t_ind) == 1
         val = svec(t_ind, 2);
     else
         val = 1;
@@ -163,11 +163,11 @@ function[Imax, hmax] = KL_MI(n_chunk, max_time, input, output)
     for trial_ind = 1:n_trial_in
         for ii_chunk_ind = 1:n_chunk
             for jj_chunk_ind = ii_chunk_ind:n_chunk
-                p_dists_in(
-                    trial_ind, ii_chunk_ind, jj_chunk_ind,
-                ) = spike_wasserstein(
-                    chunked_trains_in{trial_ind, ii_chunk_ind},
-                    chunked_trains_in{trial_ind, jj_chunk_ind},
+                p_dists_in( ...
+                    trial_ind, ii_chunk_ind, jj_chunk_ind ...
+                ) = spike_wasserstein( ...
+                    chunked_trains_in{trial_ind, ii_chunk_ind}, ...
+                    chunked_trains_in{trial_ind, jj_chunk_ind} ...
                 );
             end
         end
@@ -176,11 +176,15 @@ function[Imax, hmax] = KL_MI(n_chunk, max_time, input, output)
         for rep_ind = 1:n_rep
             for ii_chunk_ind = 1:n_chunk
                 for jj_chunk_ind = ii_chunk_ind:n_chunk
-                    p_dists_out(
-                        trial_ind, rep_ind, ii_chunk_ind, jj_chunk_ind,
-                    ) = spike_wasserstein(
-                        chunked_trains_out{trial_ind, rep_ind, ii_chunk_ind},
-                        chunked_trains_out{trial_ind, rep_ind, jj_chunk_ind},
+                    p_dists_out( ...
+                        trial_ind, rep_ind, ii_chunk_ind, jj_chunk_ind ...
+                    ) = spike_wasserstein( ...
+                        chunked_trains_out{ ...
+                            trial_ind, rep_ind, ii_chunk_ind ...
+                        }, ...
+                        chunked_trains_out{ ...
+                            trial_ind, rep_ind, jj_chunk_ind ...
+                        } ...
                     );
                 end
             end
@@ -215,8 +219,11 @@ function[Imax, hmax] = KL_MI(n_chunk, max_time, input, output)
     h_space = 2:(n_chunk - 2);
     I_space = zeros(length(h_space), 1);
     for ward = 1:length(h_space)
-        if full_grid(h_space(ward), 2) =  = 0
-            I_space(ward) = h_fun(h_space(ward), ens_dists_in, ens_dists_out, n_chunk, n_rep);
+        if full_grid(h_space(ward), 2) == 0
+            I_space(ward) = h_fun( ...
+                h_space(ward), ens_dists_in, ...
+                ens_dists_out, n_chunk, n_rep ...
+            );
         else
             I_space(ward) = full_grid(h_space(ward), 2);
         end
@@ -234,11 +241,11 @@ function[fact_out] = log_factorial(n)
         fact_out = log(factorial(n));
     else
         % Stirling's approximation
-        fact_out = (
-            log(sqrt(2 * pi * n)) + n * log(n/exp(1)) + log(
-                1 + 1/(12 * n) + 1/(288 * n ^ 2)
-                - 139/(51840 * n ^ 3) - 571/(2488320 * n ^ 4)
-            )
+        fact_out = ( ...
+            log(sqrt(2 * pi * n)) + n * log(n/exp(1)) + log( ...
+                1 + 1/(12 * n) + 1/(288 * n ^ 2) ...
+                - 139/(51840 * n ^ 3) - 571/(2488320 * n ^ 4) ...
+            ) ...
         );
     end
 
@@ -263,11 +270,12 @@ function h_score = h_fun(h_in, ens_dists_in, ens_dists_out, n_chunk, n_rep)
     I0_h = 0;
     for i = 1:h_in
         if (h_in - i) <= (n_chunk - h_in)
-            log_prob = (
-                2 * log_factorial(h_in - 1) + 2 * log_factorial(n_chunk - h_in)
-                - log_factorial(n_chunk - 1) - log_factorial(i - 1)
-                - 2 * log_factorial(h_in - i)
-                - log_factorial(n_chunk - 2 * h_in + i)
+            log_prob = ( ...
+                2 * log_factorial(h_in - 1) ...
+                + 2 * log_factorial(n_chunk - h_in) ...
+                - log_factorial(n_chunk - 1) - log_factorial(i - 1) ...
+                - 2 * log_factorial(h_in - i) ...
+                - log_factorial(n_chunk - 2 * h_in + i) ...
             );
             I0_h = I0_h + exp(log_prob) * log2(n_chunk * i/(h_in ^ 2));
         end
