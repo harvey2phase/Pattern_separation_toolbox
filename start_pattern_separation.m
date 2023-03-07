@@ -91,11 +91,17 @@ for ward=1:length(full_Matlab)
     end
 end
 if ~opt_found
-    warning('The MATLAB signal processing toolbox is not installed on your system, but you may have a license for it. Without this toolbox, the pattern separation toolbow will not be able to process voltage traces. If you need to analyse voltage traces (instead of spike times), please add the signal processing toolbox to your Matlab installation.')
+    warning(['The MATLAB signal processing toolbox is not installed on ' ...
+        'your system, but you may have a license for it. Without this' ...
+        'toolbox, the pattern separation toolbow will not be able to' ...
+        'process voltage traces. If you need to analyse voltage traces' ...
+        '(instead of spike times), please add the signal processing' ...
+        'toolbox to your Matlab installation.'])
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%% Add necessary folders to path %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-addpath('generate_spike_ensembles','info_theory_measures','other_measures','prepare_spikes','utility_functions','tutorials','example_data')
+addpath('generate_spike_ensembles','info_theory_measures','other_measures', ...
+    'prepare_spikes','utility_functions','tutorials','example_data')
