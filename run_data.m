@@ -3,10 +3,10 @@ start_pattern_separation
 n_p110s = 5;
 n_trials = 5;
 
-p110_start_index = 5;
-trial_start_index = 3;
+p110_start_index = 1;
+trial_start_index = 1;
 
-e1s = [0.4, 0.5];
+e1s = [0.2, 0.3, 0.4];
 
 results = cell(length(e1s) * n_p110s, n_trials);
 
