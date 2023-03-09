@@ -81,10 +81,10 @@ function [estMI_obj] = estimate_MI(input, output, options, max_time)
             max_chunks = ceil(1.25 * max_chunks); % Increase resolution
         end
         
-        if count > 10
-            estMI_obj = estimate_MI(input, output, options, max_time);
-            fit_not_found = false;
-        end
+        %if count > 10
+            %estMI_obj = estimate_MI(input, output, options, max_time);
+            %fit_not_found = false;
+        %end
     end
 end
 
