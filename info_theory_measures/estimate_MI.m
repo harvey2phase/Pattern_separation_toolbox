@@ -31,8 +31,6 @@ function [estMI_obj] = estimate_MI(input, output, options, max_time)
     fit_not_found = true;
     count = 0;
     while fit_not_found
-%         fprintf('n_chunk_vec');
-%         disp(n_chunk_vec);
         try % Only works with Statistics toolbox
             n_chunk = randsample(min_chunks:max_chunks, num_chunk, false);
         catch % Otherwise use a simpler method
@@ -55,9 +53,10 @@ function [estMI_obj] = estimate_MI(input, output, options, max_time)
         for ward = 1:length(n_chunk)
             n_chunk_vec(nS + ward, :) = ests_here{ward};
         end
-%         fprintf('n_chunk_vec after %d', count);
-%         disp(n_chunk_vec);
+
         count = count + 1;
+        disp("count: " + string(count));
+
         % Values with a consistent smoothing parameter
         i = n_chunk_vec(:, 3) <= (0.5 * n_chunk_vec(:, 1));
         
@@ -81,6 +80,10 @@ function [estMI_obj] = estimate_MI(input, output, options, max_time)
         else
             min_chunks = max_chunks;
             max_chunks = ceil(1.25 * max_chunks); % Increase resolution
+        end
+        if count > 10
+            estMI_obj = estimate_MI(input, output, options, max_time);
+            fit_not_found = false;
         end
     end
 end
