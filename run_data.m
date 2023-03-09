@@ -1,12 +1,13 @@
+addpath("/Users/harvey/Desktop/Pattern_separation_toolbox")
 start_pattern_separation
 
-n_p110s = 5;
-n_trials = 5;
+n_p110s = 10;
+n_trials = 10;
 
 p110_start_index = 1;
 trial_start_index = 1;
 
-e1s = [0.2, 0.3, 0.4];
+e1s = [0.1, 0.2, 0.3, 0.4, 0.5];
 
 results = cell(length(e1s) * n_p110s, n_trials);
 
@@ -14,8 +15,6 @@ data_folder_name = "spiketimes";
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
     p110s = linspace(0, e1s(i), n_p110s);
-
-    disp(e1_folder);
 
     for j=p110_start_index:n_p110s
         p110_folder = e1_folder + "/" + "p110=" + compose("%0.2f", p110s(j));
@@ -30,7 +29,7 @@ for i = 1:length(e1s)
 
             patsep = analyse_pattern_separation(in_spiketimes, out_spiketimes, 'estimate',true);
 
-            disp(patsep.info_details.MI);
+            fprintf("%f, ", patsep.info_details.MI);
             results{(i - 1) * n_p110s + j, k} = patsep.info_details.MI;
         end
         disp("writing...");
