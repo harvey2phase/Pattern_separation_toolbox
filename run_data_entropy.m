@@ -1,12 +1,12 @@
 start_pattern_separation
 
-n_p110s = 5;
-n_trials = 5;
+n_p110s = 10;
+n_trials = 10;
 
-p110_start_index = 2;
+p110_start_index = 1;
 trial_start_index = 1;
 
-e1s = [0.3, 0.4];
+e1s = [0.1, 0.2, 0.3, 0.4, 0.5];
 
 results = cell(length(e1s) * n_p110s, n_trials);
 
@@ -28,14 +28,13 @@ for i = 1:length(e1s)
             in_spiketimes = read_spiketimes(infile_name);
             out_spiketimes = read_spiketimes(outfile_name);
 
-            patsep = analyse_pattern_separation(in_spiketimes, out_spiketimes, 'estimate',true);
-
-            result = patsep.info.spTE;
+            dist_obj = distance(in_spiketimes,out_spiketimes);
+            result = dist_obj.dist_est;
             disp(result);
             results{(i - 1) * n_p110s + j, k} = result;
         end
         disp("writing...");
-        csvwrite("entropy_results_e1=" + string(e1s(i)) + ".csv", results);
+        csvwrite("wass_results_e1=" + string(e1s(i)) + ".csv", results);
     end
 end
 
