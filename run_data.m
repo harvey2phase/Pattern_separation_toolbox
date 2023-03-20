@@ -2,15 +2,14 @@ start_pattern_separation
 
 n_p110s = 10;
 n_trials = 10;
+e1s = [0.1, 0.2, 0.3, 0.4, 0.5];
 
 p110_start_index = 1;
 trial_start_index = 1;
 
-e1s = [0.5, 0.4];
-
-
-
 data_folder_name = "spiketimes";
+results_folder_name = "results/transfer entropy/";
+
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
     p110s = linspace(0, e1s(i), n_p110s);
@@ -28,13 +27,16 @@ for i = 1:length(e1s)
             in_spiketimes = read_spiketimes(infile_name);
             out_spiketimes = read_spiketimes(outfile_name);
 
-            patsep = analyse_pattern_separation(in_spiketimes, out_spiketimes, 'estimate',true);
+            num_params=struct;
+            %num_params.wordsize=5;
+            TEoptions='-max_bins -max_code -par';
+            TE_obj=TE_function(in_spiketimes,out_spiketimes,[],num_params,TEoptions);
 
-            fprintf("%f, ", patsep.info_details.MI);
-            results{j, k} = patsep.info_details.MI;
+            fprintf("%f, ", TE_obj.TE);
+            results{j, k} = TE_obj.TE;
         end
         disp("writing...");
-        csvwrite("mi_results_e1=" + string(e1s(i)) + ".csv", results);
+        csvwrite(results_folder_name + "e1=" + string(e1s(i)) + ".csv", results);
     end
 end
 
