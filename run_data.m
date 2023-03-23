@@ -8,7 +8,7 @@ p110_start_index = 1;
 trial_start_index = 1;
 
 data_folder_name = "spiketimes";
-results_folder_name = "results/transfer entropy/";
+results_folder_name = "results/redundancy/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
@@ -29,11 +29,12 @@ for i = 1:length(e1s)
 
             num_params=struct;
             %num_params.wordsize=5;
-            TEoptions='-max_bins -max_code -par';
-            TE_obj=TE_function(in_spiketimes,out_spiketimes,[],num_params,TEoptions);
+            RRoptions='-max_bins -max_code -par';
+            RR_obj=RR_function(in_spiketimes, out_spiketimes,[],num_params,RRoptions);
+            r_ratio = RR_obj.RRin - RR_obj.RRout;
 
-            fprintf("%f, ", TE_obj.TE);
-            results{j, k} = TE_obj.TE;
+            fprintf("%f, ", r_ratio);
+            results{j, k} = r_ratio;
         end
         disp("writing...");
         csvwrite(results_folder_name + "e1=" + string(e1s(i)) + ".csv", results);
