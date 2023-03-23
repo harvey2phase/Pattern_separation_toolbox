@@ -1,44 +1,49 @@
 start_pattern_separation
 
-n_p110s = 10;
+n_p111s = 10;
 n_trials = 10;
-e1s = [0.1, 0.2, 0.3, 0.4, 0.5];
+e1=.4;
+e2=.3;
+e3=.3;
 
-p110_start_index = 1;
+p111_start_index = 1;
 trial_start_index = 1;
 
-data_folder_name = "spiketimes";
-results_folder_name = "results/redundancy/";
+data_folder_name = "spiketimes/p111_varied";
+type_folder_name = "results/p111_varied/mi/";
 
-for i = 1:length(e1s)
-    e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
-    p110s = linspace(0, e1s(i), n_p110s);
-    results = cell(n_p110s, n_trials);
 
-    for j=p110_start_index:n_p110s
-        
-        p110_folder = e1_folder + "/" + "p110=" + compose("%0.2f", p110s(j));
-        disp(p110_folder);
+exp_folder = data_folder_name + "/e1=" + compose("%0.2f", e1);
+exp_folder = exp_folder + ",e2=" + compose("%0.2f", e2);
+exp_folder = exp_folder + ",e3=" + compose("%0.2f", e3);
 
-        for k=trial_start_index:n_trials
-            infile_name = e1_folder + "/in_times" + string(k) + ".csv";
-            outfile_name = p110_folder + "/out_times" + string(k) + ".csv";
+p111s = linspace(0, e3, n_p111s);
+results = cell(n_p111s, n_trials);
 
-            in_spiketimes = read_spiketimes(infile_name);
-            out_spiketimes = read_spiketimes(outfile_name);
+for j=p111_start_index:n_p111s
+    
+    p111_folder = exp_folder + "/p111=" + compose("%0.2f", p111s(j));
+    disp(p111_folder);
 
-            num_params=struct;
-            %num_params.wordsize=5;
-            RRoptions='-max_bins -max_code -par';
-            RR_obj=RR_function(in_spiketimes, out_spiketimes,[],num_params,RRoptions);
-            r_ratio = RR_obj.RRin - RR_obj.RRout;
+    for k=trial_start_index:n_trials
+        infile_name = exp_folder + "/in_times" + string(k) + ".csv";
+        outfile_name = p111_folder + "/out_times" + string(k) + ".csv";
 
-            fprintf("%f, ", r_ratio);
-            results{j, k} = r_ratio;
-        end
-        disp("writing...");
-        csvwrite(results_folder_name + "e1=" + string(e1s(i)) + ".csv", results);
+        in_spiketimes = read_spiketimes(infile_name);
+        out_spiketimes = read_spiketimes(outfile_name);
+
+        patsep = analyse_pattern_separation(in_spiketimes, out_spiketimes, 'estimate',true);
+
+        result = patsep.info_details.MI;
+        fprintf("%f, ", result);
+        results{j, k} = result;
     end
+    disp("writing...");
+
+    results_folder_name = type_folder_name + "e1=" + string(e1);
+    results_folder_name = results_folder_name + "e2=" + string(e2);
+    results_folder_name = results_folder_name + "e3=" + string(e3) + ".csv";
+    csvwrite(results_folder_name, results);
 end
 
     
