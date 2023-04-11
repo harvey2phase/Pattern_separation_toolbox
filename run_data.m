@@ -28,12 +28,14 @@ for i = 1:length(e1s)
             in_spiketimes = read_spiketimes(infile_name);
             out_spiketimes = read_spiketimes(outfile_name);
 
-            patsep = analyse_pattern_separation(in_spiketimes, out_spiketimes, 'estimate',true);
-            fprintf("%f, ", patsep.info_details.MI);
-            results{j, k} = patsep.info_details.MI;
+            
+            MIESToptions='-par'; % Use parallelisation
+            
+            estMI_obj = estimate_MI(in_spiketimes,out_spiketimes,MIESToptions); % Estimate mutual information
+            result=estMI_obj.MI;
 
-            fprintf("%f, ", r_ratio);
-            results{j, k} = r_ratio;
+            fprintf("%f, ", result);
+            results{j, k} = result;
         end
         disp("writing...");
         csvwrite(results_folder_name + "e1=" + string(e1s(i)) + ".csv", results);
