@@ -9,7 +9,7 @@ p110_start_index = 1;
 trial_start_index = 1;
 
 data_folder_name = "spiketimes";
-results_folder_name = "results/mi/";
+results_folder_name = "results/te/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
@@ -28,11 +28,10 @@ for i = 1:length(e1s)
             in_spiketimes = read_spiketimes(infile_name);
             out_spiketimes = read_spiketimes(outfile_name);
 
-            
-            MIESToptions='-par'; % Use parallelisation
-            
-            estMI_obj = estimate_MI(in_spiketimes,out_spiketimes,MIESToptions); % Estimate mutual information
-            result=estMI_obj.MI;
+            num_params=struct;
+            TEoptions='-max_bins -max_code -par';
+            TE_obj=TE_function(in_spiketimes,out_spiketimes,[],num_params,TEoptions);
+            result=TE_obj.TE;
 
             fprintf("%f, ", result);
             results{j, k} = result;
