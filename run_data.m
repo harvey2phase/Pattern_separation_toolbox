@@ -3,7 +3,7 @@ start_pattern_separation
 n_p110s = 10;
 n_trials = 10;
 eps = 10^-2;
-e1s = [0.1, 0.2, 0.3, 0.4, 0.5];
+e1s = [0.3, 0.4, 0.5];
 
 p110_start_index = 1;
 trial_start_index = 1;
