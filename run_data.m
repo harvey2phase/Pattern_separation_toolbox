@@ -2,22 +2,23 @@ start_pattern_separation
 
 n_p110s = 10;
 n_trials = 10;
+eps = 10^-2;
 e1s = [0.1, 0.2, 0.3, 0.4, 0.5];
 
 p110_start_index = 1;
 trial_start_index = 1;
 
 data_folder_name = "spiketimes";
-results_folder_name = "results/redundancy/";
+results_folder_name = "results/mi/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
-    p110s = linspace(0, e1s(i), n_p110s);
+    p110s = linspace(eps, e1s(i)-eps, n_p110s);
     results = cell(n_p110s, n_trials);
 
     for j=p110_start_index:n_p110s
         
-        p110_folder = e1_folder + "/" + "p110=" + compose("%0.2f", p110s(j));
+        p110_folder = e1_folder + "/" + "p11=" + compose("%0.2f", p110s(j));
         disp(p110_folder);
 
         for k=trial_start_index:n_trials
@@ -27,11 +28,9 @@ for i = 1:length(e1s)
             in_spiketimes = read_spiketimes(infile_name);
             out_spiketimes = read_spiketimes(outfile_name);
 
-            num_params=struct;
-            %num_params.wordsize=5;
-            RRoptions='-max_bins -max_code -par';
-            RR_obj=RR_function(in_spiketimes, out_spiketimes,[],num_params,RRoptions);
-            r_ratio = RR_obj.RRin - RR_obj.RRout;
+            patsep = analyse_pattern_separation(in_spiketimes, out_spiketimes, 'estimate',true);
+            fprintf("%f, ", patsep.info_details.MI);
+            results{j, k} = patsep.info_details.MI;
 
             fprintf("%f, ", r_ratio);
             results{j, k} = r_ratio;
