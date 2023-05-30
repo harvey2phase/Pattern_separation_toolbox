@@ -1,22 +1,24 @@
-start_pattern_separation
+start_pattern_separation;
 
-n_p110s = 10;
+n_p11s = 10;
 n_trials = 10;
 eps = 10^-2;
-e1s = [0.3, 0.4, 0.5];
+e1s = [0.10, 0.20, 0.30, 0.40, 0.50];
 
 p110_start_index = 1;
-trial_start_index = 1;
+trial_start_index = 2;
 
 data_folder_name = "spiketimes";
-results_folder_name = "results/te/";
+mi_folder = "results/mi/";
+rr_folder = "results/rr/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
-    p110s = linspace(eps, e1s(i)-eps, n_p110s);
-    results = cell(n_p110s, n_trials);
+    p110s = linspace(eps, e1s(i)-eps, n_p11s);
+    mi_results = cell(n_p11s, n_trials);
+    rr_results = cell(n_p11s, n_trials);
 
-    for j=p110_start_index:n_p110s
+    for j=p110_start_index:n_p11s
         
         p110_folder = e1_folder + "/" + "p11=" + compose("%0.2f", p110s(j));
         disp(p110_folder);
@@ -25,19 +27,23 @@ for i = 1:length(e1s)
             infile_name = e1_folder + "/in_times" + string(k) + ".csv";
             outfile_name = p110_folder + "/out_times" + string(k) + ".csv";
 
-            in_spiketimes = read_spiketimes(infile_name);
-            out_spiketimes = read_spiketimes(outfile_name);
+            input_spiketimes = read_spiketimes(infile_name);
+            output_spiketimes = read_spiketimes(outfile_name);
 
-            num_params=struct;
-            TEoptions='-max_bins -max_code -par';
-            TE_obj=TE_function(in_spiketimes,out_spiketimes,[],num_params,TEoptions);
-            result=TE_obj.TE;
+            patsep = analyse_pattern_separation(input_spiketimes,output_spiketimes,'estimate',true);
 
-            fprintf("%f, ", result);
-            results{j, k} = result;
+            fprintf("(%f, %f); ", patsep.info_details.MI, patsep.info_details.RR);
+
+            mi_results{j, k} = patsep.info_details.MI;
+            rr_results{j, k} = patsep.info_details.RR;
         end
         disp("writing...");
-        csvwrite(results_folder_name + "e1=" + string(e1s(i)) + ".csv", results);
+        mi_e1_folder = mi_folder + "e1=" + string(e1s(i)) + ".csv";
+        rr_e1_folder = rr_folder + "e1=" + string(e1s(i)) + ".csv";
+        disp(mi_e1_folder);
+        disp(rr_e1_folder);
+        csvwrite(mi_e1_folder, mi_results);
+        csvwrite(rr_e1_folder, rr_results);
     end
 end
 
