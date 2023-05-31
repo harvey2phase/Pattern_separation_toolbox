@@ -5,7 +5,7 @@ n_trials = 10;
 eps = 10^-2;
 e1s = [0.10, 0.20, 0.30, 0.40, 0.50];
 
-p110_start_index = 1;
+p110_start_index = 5;
 trial_start_index = 2;
 
 data_folder_name = "spiketimes";
