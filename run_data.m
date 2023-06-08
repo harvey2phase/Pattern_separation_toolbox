@@ -30,9 +30,9 @@ for i = 1:length(e1s)
 
             estMI_obj = estimate_MI(input_spiketimes,output_spiketimes,'-par');
 
-            fprintf("%f, ", estMI_obj.RR);
+            fprintf("%f, ", estMI_obj.MI);
 
-            results{j, k} = estMI_obj.RR;
+            results{j, k} = estMI_obj.MI;
         end
 
         disp("writing...");
