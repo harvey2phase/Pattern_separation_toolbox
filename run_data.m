@@ -9,7 +9,7 @@ trial_start_index = 1;
 n_trials = 10;
 
 data_folder_name = "spiketimes";
-results_folder = "results/rr/";
+results_folder = "results/mi/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
@@ -28,11 +28,11 @@ for i = 1:length(e1s)
             input_spiketimes = read_spiketimes(infile_name);
             output_spiketimes = read_spiketimes(outfile_name);
 
-            estRR_obj = estimate_RR(input_spiketimes,output_spiketimes,'-par');
+            estMI_obj = estimate_MI(input_spiketimes,output_spiketimes,'-par');
 
-            fprintf("%f, ", estRR_obj.RR);
+            fprintf("%f, ", estMI_obj.RR);
 
-            results{j, k} = estRR_obj.RR;
+            results{j, k} = estMI_obj.RR;
         end
 
         disp("writing...");
