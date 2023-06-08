@@ -28,7 +28,9 @@ max_chunks=ceil(max_time*10); % Start with 100ms chunks
 min_chunks=floor(max_time*4); % 250 ms chunks;
 
 fit_not_found=true;
+count=0;
 while fit_not_found
+    count=count+1;
     try % Only works with Statistics toolbox
         n_chunk=randsample(min_chunks:max_chunks,num_chunk,false);
     catch % Otherwise use a simpler method
@@ -69,6 +71,11 @@ while fit_not_found
     else
         min_chunks=max_chunks;
         max_chunks=ceil(1.25*max_chunks); % Increase resolution
+    end
+
+    if count > 100
+        estMI_obj=estimate_MI(input,output,options,max_time);
+        fit_not_found=false;
     end
 end
 
