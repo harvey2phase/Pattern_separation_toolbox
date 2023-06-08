@@ -18,12 +18,12 @@ for i = 1:length(e1s)
 
     for j=p110_start_index:n_p11s
         
-        p110_folder = e1_folder + "/" + "p11=" + compose("%0.2f", p11s(j));
-        disp(p110_folder);
+        p11_folder = e1_folder + "/" + "p11=" + compose("%0.2f", p11s(j));
+        disp(p11_folder);
 
         for k=trial_start_index:n_trials
             infile_name = e1_folder + "/in_times" + string(k) + ".csv";
-            outfile_name = p110_folder + "/out_times" + string(k) + ".csv";
+            outfile_name = p11_folder + "/out_times" + string(k) + ".csv";
 
             input_spiketimes = read_spiketimes(infile_name);
             output_spiketimes = read_spiketimes(outfile_name);
