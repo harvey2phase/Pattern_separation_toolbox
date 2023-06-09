@@ -11,8 +11,7 @@ n_trials = 10;
 data_folder_name = "spiketimes";
 mi_folder = "results/mi/";
 rr_folder = "results/rr/";
-te_folder = "results/te/";
-sp_te_folder = "results/sp_te/";
+%te_folder = "results/te/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
@@ -35,26 +34,26 @@ for i = 1:length(e1s)
             in_times = read_spiketimes(infile_name);
             out_times = read_spiketimes(outfile_name);
 
-            patsep = analyse_pattern_separation(input_spiketimes,output_spiketimes,'estimate',true);
-
-            fprintf("%f, ", patsep.info_details.MI);
+            patsep = analyse_pattern_separation(in_times,out_times,'estimate',true);
 
             mi_results{j, k} = patsep.info_details.MI;
             rr_results{j, k} = patsep.info_details.RR;
+            
+            %num_params = struct;
+            %TEoptions = '-max_bins -max_code -par';
+            %TE_obj = TE_function(in_times,out_times,[],num_params,TEoptions);
+            %te_results{j, k} = TE_obj.TE;
 
-            patsep = analyse_pattern_separation(input_spiketimes,output_spiketimes,'transfer_entropy',true);
-            te_results{j, k} = patsep.info.TE;
-            sp_te_results{j, k} = patsep.info_details.spTE;
+            fprintf("(%f, %f); ", patsep.info_details.MI, patsep.info_details.RR);
             
         end
 
         disp("writing...");
-        e1_folder = "e1=" + string(e1s(i)) + ".csv";
+        e1_results_folder = "e1=" + string(e1s(i)) + ".csv";
 
-        csvwrite(mi_folder + e1_folder, mi_results);
-        csvwrite(rr_folder + e1_folder, rr_results);
-        csvwrite(te_folder + e1_folder, te_results);
-        csvwrite(sp_te_folder + e1_folder, sp_te_results);
+        csvwrite(mi_folder + e1_results_folder, mi_results);
+        csvwrite(rr_folder + e1_results_folder, rr_results);
+        %csvwrite(te_folder + e1_folder, te_results);
 
     end
 end
