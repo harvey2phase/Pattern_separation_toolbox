@@ -12,10 +12,7 @@ data_folder_name = "spiketimes";
 mi_folder = "results/mi/";
 rr_folder = "results/rr/";
 te_folder = "results/te/";
-sp_mi_folder = "results/sp_mi/";
-sp_rr_folder = "results/sp_rr/";
 sp_te_folder = "results/sp_te/";
-
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
@@ -24,8 +21,6 @@ for i = 1:length(e1s)
     mi_results = cell(n_p11s, n_trials);
     rr_results = cell(n_p11s, n_trials);
     te_results = cell(n_p11s, n_trials);
-    sp_mi_results = cell(n_p11s, n_trials);
-    sp_rr_results = cell(n_p11s, n_trials);
     sp_te_results = cell(n_p11s, n_trials);
 
     for j=p11_start_index:n_p11s
@@ -40,16 +35,17 @@ for i = 1:length(e1s)
             in_times = read_spiketimes(infile_name);
             out_times = read_spiketimes(outfile_name);
 
-            patsep=analyse_pattern_separation(in_times,out_times);
+            patsep = analyse_pattern_separation(input_spiketimes,output_spiketimes,'estimate',true);
 
-            fprintf("%f, ", patsep.info_details.input_code);
+            fprintf("%f, ", patsep.info_details.MI);
 
             mi_results{j, k} = patsep.info_details.MI;
             rr_results{j, k} = patsep.info_details.RR;
-            te_results{j, k} = patsep.info_details.TE;
-            sp_mi_results{j, k} = patsep.info_details.spMI;
-            sp_rr_results{j, k} = patsep.info_details.spRR;
+
+            patsep = analyse_pattern_separation(input_spiketimes,output_spiketimes,'transfer_entropy',true);
+            te_results{j, k} = patsep.info.TE;
             sp_te_results{j, k} = patsep.info_details.spTE;
+            
         end
 
         disp("writing...");
@@ -58,8 +54,6 @@ for i = 1:length(e1s)
         csvwrite(mi_folder + e1_folder, mi_results);
         csvwrite(rr_folder + e1_folder, rr_results);
         csvwrite(te_folder + e1_folder, te_results);
-        csvwrite(sp_mi_folder + e1_folder, sp_mi_results);
-        csvwrite(sp_rr_folder + e1_folder, sp_rr_results);
         csvwrite(sp_te_folder + e1_folder, sp_te_results);
 
     end
