@@ -2,7 +2,9 @@ start_pattern_separation;
 
 
 n_e2s = 10;
-e2s = linspace(0, 1, n_e2s);
+min_e2 = 0.1;
+max_e2 = 0.9;
+e2s = linspace(min_e2, max_e2, n_e2s);
 
 trial_start_index = 1;
 n_trials = 10;
