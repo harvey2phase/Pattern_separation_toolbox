@@ -17,6 +17,12 @@ e2_results_folder = "variable-e2-e1=0.3.csv";
 if compute_mi
     mi_folder = "results/mi/";
     rr_folder = "results/rr/";
+end
+if compute_te
+    te_folder = "results/variable-e2/te/";
+end
+
+if compute_mi
     mi_results = cell(n_trials);
     rr_results = cell(n_trials);
 end
@@ -57,11 +63,11 @@ for j=1:n_e2s
     disp("writing...");
 
     if compute_mi
-        csvwrite(mi_folder + e2_results_folder, mi_results);
-        csvwrite(rr_folder + e2_results_folder, rr_results);
+        csvwrite(mi_folder + e2_results_name, mi_results);
+        csvwrite(rr_folder + e2_results_name, rr_results);
     end
     if compute_te
-        csvwrite(te_folder + e1_folder, te_results);
+        csvwrite(te_folder + e2_results_name, te_results);
     end
 
 end
