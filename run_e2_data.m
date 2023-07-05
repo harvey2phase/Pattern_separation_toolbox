@@ -12,20 +12,16 @@ trial_start_index = 1;
 n_trials = 10;
 
 data_folder_name = "spiketimes/variable-e2/e1=0.30";
+e2_results_folder = "variable-e2-e1=0.3.csv";
 
 if compute_mi
     mi_folder = "results/mi/";
     rr_folder = "results/rr/";
-end
-if compute_te
-    te_folder = "results/te/";
-end
-
-if compute_mi
     mi_results = cell(n_trials);
     rr_results = cell(n_trials);
 end
 if compute_te
+    te_folder = "results/te/";
     te_results = cell(n_trials);
 end
 
@@ -45,12 +41,10 @@ for j=1:n_e2s
 
         if compute_mi
             patsep = analyse_pattern_separation(in_times,out_times, 'estimate', true);
-
             mi_results{j, k} = patsep.info_details.MI;
             rr_results{j, k} = patsep.info_details.RR;
             fprintf("(%f, %f); ", patsep.info_details.MI, patsep.info_details.RR);
         end
-        
         if compute_te
             num_params = struct;
             TEoptions = '-max_bins -max_code -par';
@@ -58,11 +52,9 @@ for j=1:n_e2s
             te_results{j, k} = TE_obj.TE;
             fprintf("%f, ", TE_obj.TE);
         end
-        
     end
 
     disp("writing...");
-    e2_results_folder = "variable-e2-e1=0.3.csv";
 
     if compute_mi
         csvwrite(mi_folder + e2_results_folder, mi_results);
