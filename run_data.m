@@ -1,6 +1,6 @@
 start_pattern_separation;
 
-compute_mi = false;
+compute_mi = true;
 compute_te = true;
 
 eps = 10^-2;
@@ -49,13 +49,14 @@ for i = 1:length(e1s)
                 patsep = analyse_pattern_separation(in_times,out_times,'estimate',true);
                 mi_results{j, k} = patsep.info_details.MI;
                 rr_results{j, k} = patsep.info_details.RR;
-                fprintf("(%f, %f); ", patsep.info_details.MI, patsep.info_details.RR);
+                fprintf("(%f, %f); ", mi_results{j, k}, rr_results{j, k});
             end
             if compute_te
                 num_params = struct;
                 TEoptions = '-max_bins -max_code -par';
                 TE_obj = TE_function(in_times,out_times,[],num_params,TEoptions);
                 te_results{j, k} = TE_obj.TE;
+                fprintf("%f; ", te_results{j, k});
             end
         end
 
