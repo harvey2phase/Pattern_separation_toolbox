@@ -1,10 +1,10 @@
 start_pattern_separation;
 
-compute_mi = true;
+compute_mi = false;
 compute_te = true;
 
 eps = 10^-2;
-e1s = [0.10, 0.20, 0.30, 0.40, 0.50];
+e1s = [0.30];
 
 p11_start_index = 1;
 n_p11s = 10;
@@ -56,7 +56,7 @@ for i = 1:length(e1s)
                 TEoptions = '-max_bins -max_code -par';
                 TE_obj = TE_function(in_times,out_times,[],num_params,TEoptions);
                 te_results{j, k} = TE_obj.TE;
-                fprintf("%f; ", te_results{j, k});
+                fprintf("%f, ", te_results{j, k});
             end
         end
 
