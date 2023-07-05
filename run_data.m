@@ -8,19 +8,18 @@ n_p11s = 10;
 trial_start_index = 1;
 n_trials = 10;
 
-data_folder_name = "spiketimes";
-mi_folder = "results/mi/";
-rr_folder = "results/rr/";
-%te_folder = "results/te/";
+data_folder_name = "spiketimes/variable-th/t=16-n_bins=1e3";
+%mi_folder = "results/mi/";
+%rr_folder = "results/rr/";
+te_folder = "results/te/";
 
 for i = 1:length(e1s)
     e1_folder = data_folder_name + "/e1=" + compose("%0.2f", e1s(i));
     p11s = linspace(eps, e1s(i)-eps, n_p11s);
 
-    mi_results = cell(n_p11s, n_trials);
-    rr_results = cell(n_p11s, n_trials);
+    %mi_results = cell(n_p11s, n_trials);
+    %rr_results = cell(n_p11s, n_trials);
     te_results = cell(n_p11s, n_trials);
-    sp_te_results = cell(n_p11s, n_trials);
 
     for j=p11_start_index:n_p11s
         
@@ -36,15 +35,16 @@ for i = 1:length(e1s)
 
             patsep = analyse_pattern_separation(in_times,out_times,'estimate',true);
 
-            mi_results{j, k} = patsep.info_details.MI;
-            rr_results{j, k} = patsep.info_details.RR;
-            
-            %num_params = struct;
-            %TEoptions = '-max_bins -max_code -par';
-            %TE_obj = TE_function(in_times,out_times,[],num_params,TEoptions);
-            %te_results{j, k} = TE_obj.TE;
-
+            %mi_results{j, k} = patsep.info_details.MI;
+            %rr_results{j, k} = patsep.info_details.RR;
             fprintf("(%f, %f); ", patsep.info_details.MI, patsep.info_details.RR);
+            
+            num_params = struct;
+            TEoptions = '-max_bins -max_code -par';
+            TE_obj = TE_function(in_times,out_times,[],num_params,TEoptions);
+            te_results{j, k} = TE_obj.TE;
+
+            
             
         end
 
