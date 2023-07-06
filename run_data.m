@@ -18,7 +18,7 @@ if compute_mi
     rr_folder = "results/rr/";
 end
 if compute_te
-    te_folder = "results/te/";
+    te_folder = "results/variable-th/t=16-n_bins=1e3/te/";
 end
 
 for i = 1:length(e1s)
